@@ -1,6 +1,6 @@
 // Aktivera bildrummet när skolbilden med koden finns på plats.
 const CONFIG = {
-  "durationMinutes": 50,
+  "durationMinutes": 45,
   "photoEnabled": true,
   "photoPath": "plats.jpg",
   "photoCode": "32434",

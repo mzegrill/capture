@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Starta systemet · Grillska Gymnasiet</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js" defer></script>
+    <script src="engine.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header><b>GRILLSKA GYMNASIET</b><span>HACKATON- OCH FIXATONDAG / 23 OKTOBER 2026</span></header>
+    <main>
+      <section id="setup" class="card">
+        <p class="eyebrow">RESERVKRAFT / ETT DIGITALT ESCAPE ROOM</p>
+        <h1>Starta<br><em>systemet.</em></h1>
+        <p class="lead">Sex rum. Ett gemensamt uppdrag.<br>Undersök, anteckna och få systemet att fungera.</p>
+        <form id="start-form">
+          <label for="start-code">Startkod från läraren</label>
+          <input id="start-code" required autocomplete="off" spellcheck="false" placeholder="Ange er startkod">
+          <label for="name">Lagnamn</label>
+          <input id="name" maxlength="40" required autocomplete="off" placeholder="Ert lagnamn">
+          <button class="primary">STARTA UPPDRAGET →</button>
+        <p id="start-message" role="status"></p></form>
+        <p class="muted">50 minuter från första starten. Tiden fortsätter om ni stänger fliken. Arbeta på en dator per lag. AI och internet är tillåtna. Lös uppgifterna med sidans kontroller; ändrad kod eller manipulerade poäng räknas inte.</p>
+      </section>
+
+      <div id="game" hidden>
+        <div class="status"><span id="identity"></span><b id="score"></b><strong id="clock" aria-label="Tid kvar"></strong></div>
+        <p id="session-label" class="muted"></p>
+        <p id="test-banner" class="reward" hidden>TESTLÄGE FÖR LÄRARE · Ingen tidsgräns · Alla rum öppna · Ej tävlingsresultat</p>
+        <p id="expired-banner" role="status" hidden>Tiden är slut. Uppgifterna är låsta. Fotografera ert resultatkort.</p>
+        <nav aria-label="Rum"><button data-room="1">01 Kopplingspanelen</button><button data-room="2">02 Maskinen</button><button data-room="3">03 Kontrollrummet</button><button data-room="4">04 Platsen</button><button data-room="5">05 Den tomma filen</button><button data-room="6">06 Balansvågen</button></nav>
+        <p id="storage-note" class="muted" hidden>Webbläsaren tillåter inte att framsteg sparas. Behåll denna flik öppen.</p>
+        <section id="room1" class="card">
+          <p class="eyebrow">RUM 01 / 15 POÄNG</p>
+          <h2>Kopplingspanelen</h2>
+          <p>Sex reglage påverkar lamporna. Ett reglage kan påverka flera lampor. Hitta inställningen som matchar målet.</p>
+          <h3>Målbild</h3><div id="targets" class="lamps"></div>
+          <h3>Nuvarande läge</h3><div id="lamps" class="lamps"></div>
+          <div id="switches" class="switches"></div>
+          <div class="actions"><button id="reset-panel">Återställ reglagen</button><button id="check-panel" class="primary">KONTROLLERA</button></div>
+          <p id="panel-message" role="status"></p>
+          <details><summary>Försökslogg</summary><ol id="panel-log"></ol></details>
+          <button class="hint" data-hint="1">Visa ledtråd (−5 poäng)</button><p id="hint1" hidden></p>
+          <div id="reward1" class="reward" hidden></div>
+          <form id="gate1" hidden><label for="code1">Ange koden för att öppna rum 2</label><input id="code1" autocomplete="off" required><button class="primary">ÖPPNA RUM 2 →</button><p id="gate-message1" role="status"></p></form>
+        </section>
+        <section id="room2" class="card" hidden>
+          <p class="eyebrow">RUM 02 / 15 POÄNG</p><h2>Den okända maskinen</h2>
+          <p>Maskinen följer samma dolda regel varje gång. Testa minst tre olika heltal mellan −10 och 10. Förutsäg sedan de tre efterfrågade resultaten.</p>
+          <form id="probe-form"><label for="probe">Testvärde</label><input id="probe" type="number" min="-10" max="10" step="1" required><button class="primary">KÖR MASKINEN →</button></form>
+          <p id="probe-message" role="status"></p>
+          <table><thead><tr><th>In</th><th>Ut</th></tr></thead><tbody id="probe-log"></tbody></table>
+          <h3>Visa att ni har förstått regeln</h3>
+          <form id="predict-form"><div id="predictions" class="fields"></div><button id="predict-button" class="primary">KONTROLLERA TRE SVAR</button><p id="predict-message" role="status"></p></form>
+          <button class="hint" data-hint="2">Visa ledtråd (−5 poäng)</button><p id="hint2" hidden></p>
+          <div id="reward2" class="reward" hidden></div>
+          <form id="gate2" hidden><label for="code2">Ange koden för att öppna rum 3</label><input id="code2" required autocomplete="off"><button class="primary">ÖPPNA RUM 3 →</button><p id="gate-message2" role="status"></p></form>
+        </section>
+        <section id="room3" class="card" hidden>
+          <p class="eyebrow">RUM 03 / 20 POÄNG</p><h2>Kontrollrummet</h2>
+          <p>Använd era tidigare upptäckter för att starta systemet. Ni kan gå tillbaka till rummen och läsa loggarna. Den godkända panelinställningen visas i anteckningarna.</p>
+          <form id="final-form">
+            <label for="final1">1. Hur många reglage var PÅ i den godkända panelinställningen?</label><input id="final1" type="number" step="1" required>
+            <label for="final2">2. Vilket resultat ger maskinen när detta antal matas in?</label><input id="final2" type="number" step="1" required>
+            <label for="final3">3. Addera positionsnumren för målets tända lampor (1–6). Vad blir summan?</label><input id="final3" type="number" step="1" required>
+            <button class="primary">STARTA SYSTEMET →</button><p id="final-message" role="status"></p>
+          </form>
+          <button class="hint" data-hint="3">Visa ledtråd (−5 poäng)</button><p id="hint3" hidden></p>
+          <div id="reward3" class="reward" hidden></div>
+          <form id="gate3" hidden><label for="code3">Ange koden för att öppna rum 4</label><input id="code3" required autocomplete="off"><button class="primary">ÖPPNA RUM 4 →</button><p id="gate-message3" role="status"></p></form>
+        </section>
+
+        <section id="room4" class="card" hidden>
+          <p class="eyebrow">RUM 04 / 15 POÄNG</p><h2>Platsen</h2>
+          <p>Studera bilden från skolan. Hitta den femsiffriga koden och skriv in den. Ni behöver inte lämna klassrummet.</p>
+          <div id="photo-frame"><img id="school-photo" alt="En plats i skolan med en dold femsiffrig kod" hidden><p id="photo-placeholder">Skolbilden laddas…</p></div>
+          <p id="photo-disabled" class="muted">Detta rum är inte aktiverat ännu. Ni kan fortsätta utan poäng; rummet räknas inte i maxpoängen.</p>
+          <form id="photo-form"><label for="photo-key">Koden på platsen</label><input id="photo-key" required inputmode="numeric" pattern="[0-9]{5}" autocomplete="off"><button class="primary">KONTROLLERA KODEN</button><p id="photo-message" role="status"></p></form>
+          <button class="hint" data-hint="4">Visa ledtråd (−5 poäng)</button><p id="hint4" hidden></p>
+          <button id="skip-photo" class="primary">FORTSÄTT TILL RUM 5 →</button>
+          <div id="reward4" class="reward" hidden></div>
+          <form id="gate4" hidden><label for="code4">Ange koden för att öppna rum 5</label><input id="code4" required autocomplete="off"><button class="primary">ÖPPNA RUM 5 →</button><p id="gate-message4" role="status"></p></form>
+        </section>
+        <section id="room5" class="card" hidden>
+          <p class="eyebrow">RUM 05 / 15 POÄNG</p><h2>Den tomma filen</h2>
+          <p>En tekniker lämnade en textfil. Den ser tom ut, men innehåller information. Ladda ner filen och hitta nyckeln. Ni får använda en texteditor, egna verktyg eller AI.</p>
+          <button id="download-file" class="primary">LADDA NER SIGNAL.TXT ↓</button>
+          <form id="file-form"><label for="file-key">Nyckeln i filen</label><input id="file-key" required autocomplete="off"><button class="primary">KONTROLLERA NYCKELN</button><p id="file-message" role="status"></p></form>
+          <button class="hint" data-hint="5">Visa ledtråd (−5 poäng)</button><p id="hint5" hidden></p>
+          <div id="reward5" class="reward" hidden></div>
+          <form id="gate5" hidden><label for="code5">Ange koden för att öppna rum 6</label><input id="code5" required autocomplete="off"><button class="primary">ÖPPNA RUM 6 →</button><p id="gate-message5" role="status"></p></form>
+        </section>
+        <section id="room6" class="card" hidden>
+          <p class="eyebrow">RUM 06 / 20 POÄNG</p><h2>Den felaktiga komponenten</h2>
+          <p>Åtta komponenter ser likadana ut. Exakt en är tyngre än de andra. Hitta den med högst två vägningar. Lägg lika många komponenter på båda sidor av vågen.</p>
+          <p>Välj Vänster, Höger eller Utanför för varje komponent. Efter ett felaktigt svar börjar ett nytt försök med en ny tyngre komponent.</p>
+          <div id="scale-parts" class="fields"></div>
+          <button id="weigh" class="primary">VÄG KOMPONENTERNA</button><p id="scale-message" role="status"></p><p id="weigh-count"></p><ol id="weigh-log"></ol>
+          <form id="heavy-form"><label for="heavy-choice">Vilken komponent är tyngre?</label><select id="heavy-choice" required><option value="">Välj 1–8</option></select><button class="primary">LÄMNA SLUTSVAR</button><p id="heavy-message" role="status"></p></form>
+          <button class="hint" data-hint="6">Visa ledtråd (−5 poäng)</button><p id="hint6" hidden></p>
+        </section>
+        <section class="card notebook"><h3>Lagets anteckningar</h3><p id="observations"></p><label for="notes">Skriv era hypoteser och upptäckter</label><textarea id="notes" rows="4" placeholder="Vad påverkar vad? Vilken regel tror vi att maskinen följer?"></textarea></section>
+        <section id="receipt" class="card receipt" tabindex="-1"><p class="eyebrow">RESULTAT / FOTOGRAFERA HELA KORTET</p><h2 id="result-title"></h2><p id="result-team"></p><div id="result-score"></div><p id="result-rooms"></p><p id="result-hints"></p><p id="result-session"></p><p id="result-time"></p><p class="muted">Grillska Gymnasiet · 23 oktober 2026<br>Starta systemet · Hackaton- och Fixatondag</p></section>
+        <button id="reset-game" class="quiet">Till startsidan (tiden fortsätter)</button> <button id="reset-test" class="quiet" hidden>Nollställ testomgång</button>
+      </div>
+    </main>
+    <footer>TESTA EN IDÉ. OBSERVERA. FÖRBÄTTRA.</footer>
+  </body>
+</html>
